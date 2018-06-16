@@ -1,6 +1,6 @@
 package centertableinc.ed.bakingapp.recipes.data;
 
-interface RecipeStep {
+public interface RecipeStep {
     String getStepId();
     String getStepShortDescription();
     String getStepDescription();

@@ -2,7 +2,7 @@ package centertableinc.ed.bakingapp.recipes.data;
 
 import java.util.List;
 
-interface Recipe {
+public interface Recipe {
     String getRecipeId();
     String getRecipeName();
     List<RecipeIngredient> getIngredientList();
