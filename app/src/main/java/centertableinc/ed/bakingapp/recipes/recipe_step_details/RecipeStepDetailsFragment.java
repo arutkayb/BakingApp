@@ -1,4 +1,4 @@
-package centertableinc.ed.bakingapp.recipes.recipes_step_details;
+package centertableinc.ed.bakingapp.recipes.recipe_step_details;
 
 import android.content.Context;
 import android.net.Uri;
