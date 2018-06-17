@@ -6,11 +6,11 @@ import android.os.Bundle;
 import java.util.List;
 
 import centertableinc.ed.bakingapp.R;
+import centertableinc.ed.bakingapp.recipes.data.Recipe;
 import centertableinc.ed.bakingapp.recipes.data.RecipesDB;
-import centertableinc.ed.bakingapp.recipes.data.udacity_data.UdacityRecipe;
 import centertableinc.ed.bakingapp.recipes.data.udacity_data.UdacityRecipesDB;
 
-public class RecipesMasterActivity extends AppCompatActivity implements AsyncDataListener<List<UdacityRecipe>> {
+public class RecipesMasterActivity extends AppCompatActivity implements AsyncDataListener<List<Recipe>> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +26,11 @@ public class RecipesMasterActivity extends AppCompatActivity implements AsyncDat
     }
 
     @Override
-    public void onDataLoad(List<UdacityRecipe> data){
+    public void onDataLoad(List data){
         bindDataToView(data);
     }
 
-    private void bindDataToView(List<UdacityRecipe> data){
+    private void bindDataToView(List data){
         //TODO: fill here
     }
 
