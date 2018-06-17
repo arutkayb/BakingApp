@@ -1,6 +1,8 @@
 package centertableinc.ed.bakingapp.recipes.data;
 
-public interface RecipeStep {
+import android.os.Parcelable;
+
+public interface RecipeStep extends Parcelable {
     String getStepId();
     String getStepShortDescription();
     String getStepDescription();

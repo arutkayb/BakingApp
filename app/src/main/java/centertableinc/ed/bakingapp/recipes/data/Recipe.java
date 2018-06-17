@@ -1,8 +1,10 @@
 package centertableinc.ed.bakingapp.recipes.data;
 
+import android.os.Parcelable;
+
 import java.util.List;
 
-public interface Recipe {
+public interface Recipe extends Parcelable {
     String getRecipeId();
     String getRecipeName();
     List<RecipeIngredient> getIngredientList();

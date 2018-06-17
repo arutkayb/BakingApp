@@ -1,5 +1,9 @@
 package centertableinc.ed.bakingapp.recipes.data.udacity_data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import centertableinc.ed.bakingapp.recipes.data.RecipeIngredient;
@@ -41,4 +45,36 @@ public class Ingredient implements RecipeIngredient{
     public String getIngredientName() {
         return ingredient;
     }
+
+
+    protected Ingredient(Parcel in) {
+        ingredientQuantity = in.readString();
+        ingredientMeasure = in.readString();
+        ingredient = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(ingredientQuantity);
+        dest.writeString(ingredientMeasure);
+        dest.writeString(ingredient);
+    }
+
+    public static final Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
+        @Override
+        public Ingredient createFromParcel(Parcel in) {
+            return new Ingredient(in);
+        }
+
+        @Override
+        public Ingredient[] newArray(int size) {
+            return new Ingredient[size];
+        }
+    };
+
 }

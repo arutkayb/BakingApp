@@ -1,5 +1,9 @@
 package centertableinc.ed.bakingapp.recipes.data.udacity_data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -10,6 +14,9 @@ import centertableinc.ed.bakingapp.recipes.data.RecipeStep;
 
 
 public class UdacityRecipe implements Recipe {
+    private static final int INGREDIENT_LIST_PARCELABLE_FLAG = 0;
+    private static final int STEP_LIST_PARCELABLE_FLAG = 1;
+
     private static final String ID = "id";
     private static final String NAME = "name";
     private static final String INGREDIENTS = "ingredients";
@@ -34,7 +41,6 @@ public class UdacityRecipe implements Recipe {
 
     @SerializedName(IMAGE)
     private String recipeImage;
-
 
     @Override
     public String getRecipeId() {
@@ -65,4 +71,45 @@ public class UdacityRecipe implements Recipe {
     public String getRecipeImage() {
         return recipeImage;
     }
+
+    protected UdacityRecipe(Parcel in) {
+        recipeId = in.readString();
+        recipeName = in.readString();
+
+        ingredientList = new ArrayList<Ingredient>();
+        in.readTypedList(ingredientList, Ingredient.CREATOR);
+
+        stepList = new ArrayList<Step>();
+        in.readTypedList(stepList, Step.CREATOR);
+
+        recipeServings = in.readInt();
+        recipeImage = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(recipeId);
+        dest.writeString(recipeName);
+        dest.writeTypedList(ingredientList);
+        dest.writeTypedList(stepList);
+        dest.writeInt(recipeServings);
+        dest.writeString(recipeImage);
+    }
+
+    public static final Creator<UdacityRecipe> CREATOR = new Parcelable.Creator<UdacityRecipe>() {
+        @Override
+        public UdacityRecipe createFromParcel(Parcel in) {
+            return new UdacityRecipe(in);
+        }
+
+        @Override
+        public UdacityRecipe[] newArray(int size) {
+            return new UdacityRecipe[size];
+        }
+    };
 }

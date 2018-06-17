@@ -1,5 +1,9 @@
 package centertableinc.ed.bakingapp.recipes.data.udacity_data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import centertableinc.ed.bakingapp.recipes.data.RecipeStep;
@@ -61,4 +65,38 @@ public class Step implements RecipeStep{
     public String getStepThumbnailUrl() {
         return stepThumbnailUrl;
     }
+
+    protected Step(Parcel in) {
+        stepId = in.readString();
+        stepShortDescription = in.readString();
+        stepDescription = in.readString();
+        stepVideoUrl = in.readString();
+        stepThumbnailUrl = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(stepId);
+        dest.writeString(stepShortDescription);
+        dest.writeString(stepDescription);
+        dest.writeString(stepVideoUrl);
+        dest.writeString(stepThumbnailUrl);
+    }
+
+    public static final Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
+        @Override
+        public Step createFromParcel(Parcel in) {
+            return new Step(in);
+        }
+
+        @Override
+        public Step[] newArray(int size) {
+            return new Step[size];
+        }
+    };
 }
