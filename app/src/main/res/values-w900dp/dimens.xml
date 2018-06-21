@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="recipes_master_parent_weight">3</dimen>
+    <dimen name="recipes_overview_weight">1</dimen>
+    <dimen name="recipe_details_weight">2</dimen>
+
+</resources>

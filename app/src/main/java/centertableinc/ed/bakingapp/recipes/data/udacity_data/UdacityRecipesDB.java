@@ -2,9 +2,11 @@ package centertableinc.ed.bakingapp.recipes.data.udacity_data;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import centertableinc.ed.bakingapp.recipes.AsyncDataListener;
+import centertableinc.ed.bakingapp.recipes.data.RecipeList;
 import centertableinc.ed.bakingapp.recipes.data.RecipesDB;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -16,16 +18,22 @@ public class UdacityRecipesDB implements RecipesDB{
         UdacityRecipesInterface udacityRecipes = RetrofitInstance.getRetrofitInstance()
                 .create(UdacityRecipesInterface.class);
 
-        Call<List<UdacityRecipe>> call = udacityRecipes.getRecipeList();
+        Call<ArrayList<UdacityRecipe>> call = udacityRecipes.getRecipeList();
 
-        call.enqueue(new Callback<List<UdacityRecipe>>() {
+        call.enqueue(new Callback<ArrayList<UdacityRecipe>>() {
             @Override
-            public void onResponse(Call<List<UdacityRecipe>> call, Response<List<UdacityRecipe>> response) {
-                listener.onDataLoad(response.body());
+            public void onResponse(Call<ArrayList<UdacityRecipe>> call, Response<ArrayList<UdacityRecipe>> response) {
+                try {
+                    listener.onDataLoad(new RecipeList(response.body()));
+                }catch (RecipeList.InsufficientListTypeException ex){
+                    Log.e(getClass().getName(), "Returned data is not a type of List<Recipe>, exception: " + ex.toString());
+                }catch (Exception ex){
+                    Log.e(getClass().getName(), "Exception: " + ex.toString());
+                }
             }
 
             @Override
-            public void onFailure(Call<List<UdacityRecipe>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UdacityRecipe>> call, Throwable t) {
                 Log.e(getClass().getName(), "Network error");
             }
         });

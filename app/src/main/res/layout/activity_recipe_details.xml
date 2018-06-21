@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recipes.RecipesMasterActivity">
+    tools:context=".recipes.recipe_details.RecipeDetailsActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recipes_overview_fragment_container">
+        android:id="@+id/recipe_details_fragment_container">
 
     </FrameLayout>
+
 </LinearLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".recipes.RecipesMasterActivity"
+    android:baselineAligned="false"
+    android:weightSum="@dimen/recipes_master_parent_weight"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="@dimen/recipes_overview_weight"
+        android:id="@+id/recipes_overview_fragment_container">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/recipe_details_fragment_container"
+        android:layout_weight="@dimen/recipe_details_weight">
+
+    </FrameLayout>
+</LinearLayout>
