@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recipes.RecipesMasterActivity">
+    tools:context=".recipes.recipes_overview.RecipesMasterActivity">
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recipes_overview_fragment_container">
+        android:layout_height="match_parent"
+        android:id="@+id/recycler_view_recipes_overview">
 
-    </FrameLayout>
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

@@ -14,9 +14,6 @@ import centertableinc.ed.bakingapp.recipes.data.RecipeStep;
 
 
 public class UdacityRecipe implements Recipe {
-    private static final int INGREDIENT_LIST_PARCELABLE_FLAG = 0;
-    private static final int STEP_LIST_PARCELABLE_FLAG = 1;
-
     private static final String ID = "id";
     private static final String NAME = "name";
     private static final String INGREDIENTS = "ingredients";

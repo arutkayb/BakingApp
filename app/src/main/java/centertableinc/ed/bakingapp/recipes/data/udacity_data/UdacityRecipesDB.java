@@ -3,9 +3,8 @@ package centertableinc.ed.bakingapp.recipes.data.udacity_data;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import centertableinc.ed.bakingapp.recipes.AsyncDataListener;
+import centertableinc.ed.bakingapp.recipes.common.AsyncDataListener;
 import centertableinc.ed.bakingapp.recipes.data.RecipeList;
 import centertableinc.ed.bakingapp.recipes.data.RecipesDB;
 import retrofit2.Call;
