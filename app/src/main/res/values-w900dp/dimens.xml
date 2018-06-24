@@ -4,4 +4,6 @@
     <dimen name="recipes_overview_weight">1</dimen>
     <dimen name="recipe_details_weight">2</dimen>
 
+    <dimen name="recipe_item_common_margin">10dp</dimen>
+
 </resources>

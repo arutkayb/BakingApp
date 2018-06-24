@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ContentHeader" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/handwriting_regular</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_content_header</item>
+    </style>
+
+    <style name="Content" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/handwriting_regular</item>
+    </style>
+
 </resources>

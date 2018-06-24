@@ -22,13 +22,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         if(recipe == null){
             Log.e(getClass().getName(), "Passed recipe is null, terminating the activity");
             finish();
-        }else{
-            RecipeDetailsFragment recipeDetailsFragment = RecipeDetailsFragment.newInstance(recipe);
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .add(R.id.recipe_details_fragment_container, recipeDetailsFragment)
-                    .commit();
         }
+
+        RecipeDetailsFragment recipeDetailsFragment = RecipeDetailsFragment.newInstance(recipe);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.recipe_details_fragment_container, recipeDetailsFragment)
+                .commit();
     }
 }

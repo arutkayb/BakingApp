@@ -1,14 +1,22 @@
 package centertableinc.ed.bakingapp.recipes.recipes_overview.recycler;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import centertableinc.ed.bakingapp.R;
 import centertableinc.ed.bakingapp.recipes.common.RecyclerViewListener;
@@ -66,12 +74,30 @@ public class OverviewRecyclerAdapter extends RecyclerView.Adapter<OverviewRecycl
             view.setOnClickListener(this);
         }
 
-        void bindHolder(Recipe recipe){
+        void bindHolder(final Recipe recipe){
             Uri thumbnail_uri = Uri.parse(recipe.getRecipeImage());
-            BakingGlideModule.loadImageToImageView(context, thumbnail_uri, recipe_image);
+            BakingGlideModule.loadImageToImageView(context,
+                    new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            recipe_image.setBackgroundResource(R.drawable.recipe_overview_icon);
+                            Log.e(getClass().getName(), "Error loading image", e);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    },
+                    thumbnail_uri,
+                    recipe_image);
 
             recipe_name.setText(recipe.getRecipeName());
-            servings.setText(String.valueOf(recipe.getRecipeServings()));
+
+            String servingsString = context.getString(R.string.servings)
+                    + ": " + String.valueOf(recipe.getRecipeServings());
+            servings.setText(servingsString);
         }
 
         @Override

@@ -1,16 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recipes.recipe_details.RecipeDetailsFragment">
+    tools:context=".recipes.recipe_details.RecipeDetailsFragment"
+    android:orientation="vertical"
+    android:baselineAligned="false"
+    android:weightSum="@dimen/recipes_details_parent_weight">
 
-    <android.support.v7.widget.RecyclerView
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recipe_details_recycler_view">
+        android:layout_height="wrap_content"
+        android:text="@string/ingredients_header"
+        android:gravity="center"
+        android:background="@color/colorAccent"
+        style="@style/ContentHeader"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="@dimen/recipe_ingredients_weight">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recipe_ingredients_recycler_view"
+            android:background="@color/colorPrimaryLight">
+        </android.support.v7.widget.RecyclerView>
+
+    </ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/steps_header"
+        android:gravity="center"
+        android:background="@color/colorAccent"
+        style="@style/ContentHeader"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="@dimen/recipe_steps_weight">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/basic_recipe_steps_recycler_view"
+            android:background="@color/colorPrimaryLight">
+        </android.support.v7.widget.RecyclerView>
+
+    </ScrollView>
 
 
-    </android.support.v7.widget.RecyclerView>
-
-</FrameLayout>
+</LinearLayout>

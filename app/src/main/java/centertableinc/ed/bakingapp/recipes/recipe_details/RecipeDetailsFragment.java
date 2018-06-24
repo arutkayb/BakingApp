@@ -3,20 +3,32 @@ package centertableinc.ed.bakingapp.recipes.recipe_details;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import centertableinc.ed.bakingapp.R;
 import centertableinc.ed.bakingapp.recipes.data.Recipe;
 import centertableinc.ed.bakingapp.recipes.data.RecipeList;
 import centertableinc.ed.bakingapp.recipes.data.Recipe;
+import centertableinc.ed.bakingapp.recipes.recipe_details.recycler.BasicRecipeStepsRecyclerAdapter;
+import centertableinc.ed.bakingapp.recipes.recipe_details.recycler.RecipeIngredientsRecyclerAdapter;
 
 public class RecipeDetailsFragment extends Fragment {
     private static final String PARCELABLE_KEY_RECIPE_DETAILS = "parcelable_key_recipe_details";
+    View fragmentView;
     Recipe recipe;
+    RecyclerView basicRecipeStepsRecyclerView, recipeIngredientsRecyclerView;
+
+    BasicRecipeStepsRecyclerAdapter basicRecipeStepsRecyclerAdapter;
+    RecipeIngredientsRecyclerAdapter recipeIngredientsRecyclerAdapter;
 
     public RecipeDetailsFragment() {
     }
@@ -41,7 +53,6 @@ public class RecipeDetailsFragment extends Fragment {
 
             if(recipe != null){
                 setRecipe(recipe);
-                bindRecipeDetails(recipe);
             }else{
                 //TODO: Need for an action here
                 Log.d(getClass().getName(), "Recipe in bundle is empty!");
@@ -52,8 +63,21 @@ public class RecipeDetailsFragment extends Fragment {
         }
     }
 
+    private void initialise(){
+        basicRecipeStepsRecyclerView = fragmentView.findViewById(R.id.basic_recipe_steps_recycler_view);
+        recipeIngredientsRecyclerView = fragmentView.findViewById(R.id.recipe_ingredients_recycler_view);
+    }
+
     private void bindRecipeDetails(Recipe recipe){
-    //TODO: bind the recyclerView here
+        basicRecipeStepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recipeIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        basicRecipeStepsRecyclerAdapter = new BasicRecipeStepsRecyclerAdapter(getContext(),
+                recipe.getStepList());
+        basicRecipeStepsRecyclerView.setAdapter(basicRecipeStepsRecyclerAdapter);
+
+        recipeIngredientsRecyclerAdapter = new RecipeIngredientsRecyclerAdapter(getContext(), recipe.getIngredientList());
+        recipeIngredientsRecyclerView.setAdapter(recipeIngredientsRecyclerAdapter);
     }
 
     private void setRecipe(Recipe recipe){
@@ -64,7 +88,18 @@ public class RecipeDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipe_details, container, false);
+        fragmentView = inflater.inflate(R.layout.fragment_recipe_details, container, false);
+
+        initialise();
+
+        return fragmentView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        bindRecipeDetails(recipe);
     }
 
     @Override

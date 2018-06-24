@@ -1,30 +1,37 @@
 package centertableinc.ed.bakingapp.recipes.recipe_step_details.recycler;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
 import centertableinc.ed.bakingapp.R;
 import centertableinc.ed.bakingapp.recipes.common.RecyclerViewListener;
-import centertableinc.ed.bakingapp.recipes.data.Recipe;
 import centertableinc.ed.bakingapp.recipes.data.RecipeStep;
-import centertableinc.ed.bakingapp.recipes.data.udacity_data.Ingredient;
 import centertableinc.ed.bakingapp.util.networking.BakingGlideModule;
 
-public class RecipeStepsRecyclerAdapter extends RecyclerView.Adapter<RecipeStepsRecyclerAdapter.RecipeStepsHolder>{
+public class DetailedRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<DetailedRecipeStepsRecyclerAdapter.RecipeStepsHolder>{
     private RecyclerViewListener listener;
     private List<RecipeStep> stepList;
+    private Context context;
 
-    public RecipeStepsRecyclerAdapter(List<RecipeStep> steps){
+    public DetailedRecipeStepsRecyclerAdapter(Context context, List<RecipeStep> steps){
+        this.context = context;
         stepList = steps;
     }
 
@@ -54,26 +61,40 @@ public class RecipeStepsRecyclerAdapter extends RecyclerView.Adapter<RecipeSteps
     class RecipeStepsHolder extends RecyclerView.ViewHolder{
         ImageView thumbnail;
         TextView description;
-        FrameLayout video_container;
+        TextView stepNumber;
 
         public RecipeStepsHolder(View itemView) {
             super(itemView);
 
             thumbnail = itemView.findViewById(R.id.thumbnail);
             description = itemView.findViewById(R.id.description);
-            video_container = itemView.findViewById(R.id.video_container);
+            stepNumber = itemView.findViewById(R.id.step_number);
         }
 
         void bindHolder(RecipeStep recipeStep){
-            //TODO: fix the weirdo implementation here
-            if(listener instanceof Context) {
-                Uri thumbnail_uri = Uri.parse(recipeStep.getStepThumbnailUrl());
-                BakingGlideModule.loadImageToImageView((Context) listener, thumbnail_uri, thumbnail);
-            }
+            Uri thumbnail_uri = Uri.parse(recipeStep.getStepThumbnailUrl());
+            BakingGlideModule.loadImageToImageView(context,
+                    new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            thumbnail.setBackgroundResource(R.drawable.recipe_overview_icon);
+                            Log.e(getClass().getName(), "Error loading image", e);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    },
+                    thumbnail_uri,
+                    thumbnail);
 
             description.setText(recipeStep.getStepDescription());
 
-            // //TODO: use Exoplayer to bind video to video_container
+            String stepNumberText = context.getString(R.string.step_number)
+                    + ": " + String.valueOf(getAdapterPosition());
+            stepNumber.setText(stepNumberText);
         }
     }
 }

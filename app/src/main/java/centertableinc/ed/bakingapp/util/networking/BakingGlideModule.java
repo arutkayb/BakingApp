@@ -18,6 +18,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
+import centertableinc.ed.bakingapp.R;
+
 @GlideModule
 public final class BakingGlideModule extends AppGlideModule {
     @Override
@@ -28,22 +30,26 @@ public final class BakingGlideModule extends AppGlideModule {
         builder.setDefaultRequestOptions(new RequestOptions().format(DecodeFormat.PREFER_ARGB_8888));
     }
 
-    public static void loadImageToImageView(Context context, Uri uri, ImageView view){
+    public static void loadImageToImageView(final Context context, @Nullable RequestListener<Drawable> listener, Uri uri, ImageView view){
+        if(listener == null){
+            listener = new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    Log.e(getClass().getName(), "Error loading image", e);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    return false;
+                }
+            };
+        }
+
         //TODO: apply necessary gravity solution here such as centerCrop() or fitCenter()
         GlideApp.with(context)
                 .load(uri)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        Log.e(getClass().getName(), "Error loading image", e);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
+                .listener(listener)
                 .into(view);
     }
 }

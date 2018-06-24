@@ -1,22 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:layout_marginBottom="@dimen/recipe_item_common_margin"
+    android:background="@color/colorPrimaryAlmostWhite">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/step_thumbnail_width"
+        android:layout_height="@dimen/step_thumbnail_height"
         android:contentDescription="@string/content_description_step_thumbnail"
-        android:id="@+id/thumbnail"/>
+        android:id="@+id/thumbnail"
+        android:layout_margin="@dimen/icon_thumbnail_margin"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/description"/>
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/video_container"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/step_number"
+            style="@style/Content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/description"
+            style="@style/Content"/>
+
+    </LinearLayout>
 </LinearLayout>

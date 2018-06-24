@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_marginBottom="@dimen/recipe_item_common_margin"
+    android:background="@color/colorPrimaryLight">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/recipe_thumbnail_width"
+        android:layout_height="@dimen/recipe_thumbnail_height"
         android:id="@+id/recipe_image"
-        android:maxWidth="@dimen/recipe_thumbnail_width"
-        android:minHeight="@dimen/recipe_thumbnail_height"
         android:scaleType="center"
+        android:layout_margin="@dimen/recipe_item_common_margin"
         />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
         <TextView
+            android:id="@+id/recipe_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/recipe_name"/>
+            android:textSize="@dimen/text_size_recipe_item_recipe_name"
+            android:textStyle="bold"
+            style="@style/Content"/>
 
         <TextView
+            android:id="@+id/servings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/servings"/>
+            android:textSize="@dimen/text_size_recipe_item_recipe_servings"
+            style="@style/Content"/>
 
     </LinearLayout>
 
