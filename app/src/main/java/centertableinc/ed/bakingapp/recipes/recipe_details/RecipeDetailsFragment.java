@@ -1,6 +1,7 @@
 package centertableinc.ed.bakingapp.recipes.recipe_details;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,11 +16,16 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import centertableinc.ed.bakingapp.R;
+import centertableinc.ed.bakingapp.recipes.common.RecyclerViewListener;
 import centertableinc.ed.bakingapp.recipes.data.Recipe;
 import centertableinc.ed.bakingapp.recipes.data.RecipeList;
 import centertableinc.ed.bakingapp.recipes.data.Recipe;
 import centertableinc.ed.bakingapp.recipes.recipe_details.recycler.BasicRecipeStepsRecyclerAdapter;
 import centertableinc.ed.bakingapp.recipes.recipe_details.recycler.RecipeIngredientsRecyclerAdapter;
+import centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity;
+
+import static centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity.RECIPE_SELECTED_STEP_NO;
+import static centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity.RECIPE_STEP_LIST_PARCELABLE_KEY;
 
 public class RecipeDetailsFragment extends Fragment {
     private static final String PARCELABLE_KEY_RECIPE_DETAILS = "parcelable_key_recipe_details";
@@ -68,11 +74,21 @@ public class RecipeDetailsFragment extends Fragment {
         recipeIngredientsRecyclerView = fragmentView.findViewById(R.id.recipe_ingredients_recycler_view);
     }
 
-    private void bindRecipeDetails(Recipe recipe){
+    private void bindRecipeDetails(final Recipe recipe){
         basicRecipeStepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recipeIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         basicRecipeStepsRecyclerAdapter = new BasicRecipeStepsRecyclerAdapter(getContext(),
+                new RecyclerViewListener() {
+                    @Override
+                    public void onItemSelectedEvent(int itemNo) {
+                        Intent intent = new Intent(getActivity(), DetailedRecipeStepsActivity.class);
+                        intent.putExtra(RECIPE_SELECTED_STEP_NO, recipe.getStepList());
+                        intent.putExtra(RECIPE_STEP_LIST_PARCELABLE_KEY, recipe.getStepList());
+
+                        startActivity(intent);
+                    }
+                },
                 recipe.getStepList());
         basicRecipeStepsRecyclerView.setAdapter(basicRecipeStepsRecyclerAdapter);
 

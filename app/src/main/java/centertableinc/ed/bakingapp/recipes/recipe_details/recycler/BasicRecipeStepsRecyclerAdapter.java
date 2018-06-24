@@ -30,7 +30,8 @@ public class BasicRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<BasicR
     private List<RecipeStep> stepList;
     private Context context;
 
-    public BasicRecipeStepsRecyclerAdapter(Context context, List<RecipeStep> steps){
+    public BasicRecipeStepsRecyclerAdapter(Context context, RecyclerViewListener listener, List<RecipeStep> steps){
+        this.listener = listener;
         this.context = context;
         stepList = steps;
     }
@@ -58,7 +59,7 @@ public class BasicRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<BasicR
         return stepList.size();
     }
 
-    class RecipeStepsHolder extends RecyclerView.ViewHolder{
+    class RecipeStepsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView thumbnail;
         TextView shortDescription;
         TextView stepNumber;
@@ -69,6 +70,8 @@ public class BasicRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<BasicR
             thumbnail = itemView.findViewById(R.id.thumbnail);
             shortDescription = itemView.findViewById(R.id.description);
             stepNumber = itemView.findViewById(R.id.step_number);
+
+            itemView.setOnClickListener(this);
         }
 
         void bindHolder(RecipeStep recipeStep){
@@ -96,5 +99,13 @@ public class BasicRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<BasicR
                     + ": " + String.valueOf(getAdapterPosition());
             stepNumber.setText(stepNumberText);
         }
+
+        @Override
+        public void onClick(View view) {
+            listener.onItemSelectedEvent(getAdapterPosition());
+        }
+
     }
+
+
 }

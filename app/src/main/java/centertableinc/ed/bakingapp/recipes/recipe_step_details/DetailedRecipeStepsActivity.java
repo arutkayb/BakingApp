@@ -12,7 +12,10 @@ import centertableinc.ed.bakingapp.recipes.data.RecipeStep;
 
 public class DetailedRecipeStepsActivity extends AppCompatActivity {
     public static final String RECIPE_STEP_LIST_PARCELABLE_KEY = "recipe_step_list";
+    public static final String RECIPE_SELECTED_STEP_NO = "selected_step";
+
     ArrayList<RecipeStep> recipeSteps;
+    RecipeStep selectedStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +25,12 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
         if(!getRecipeStepsFromIntent())
             finish();
 
-        bindDetailedSteps();
+        int selectedStepNo = getIntent().getIntExtra(RECIPE_SELECTED_STEP_NO, 0);
+        if(selectedStepNo > recipeSteps.size())
+            selectedStepNo = 0;
+        selectedStep = recipeSteps.get(selectedStepNo);
+
+        bindDetailedSteps(selectedStep);
     }
 
     private boolean getRecipeStepsFromIntent(){
@@ -41,7 +49,7 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
         return ret;
     }
 
-    private void bindDetailedSteps(){
-        //TODO: bind the recyclerView here
+    private void bindDetailedSteps(RecipeStep step){
+        //TODO: bind the step details here
     }
 }
