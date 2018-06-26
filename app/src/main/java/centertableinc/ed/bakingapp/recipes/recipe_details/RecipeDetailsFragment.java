@@ -83,7 +83,7 @@ public class RecipeDetailsFragment extends Fragment {
                     @Override
                     public void onItemSelectedEvent(int itemNo) {
                         Intent intent = new Intent(getActivity(), DetailedRecipeStepsActivity.class);
-                        intent.putExtra(RECIPE_SELECTED_STEP_NO, recipe.getStepList());
+                        intent.putExtra(RECIPE_SELECTED_STEP_NO, itemNo);
                         intent.putExtra(RECIPE_STEP_LIST_PARCELABLE_KEY, recipe.getStepList());
 
                         startActivity(intent);

@@ -13,7 +13,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@dimen/recipes_overview_weight"
-        android:id="@+id/recycler_view_recipes_overview">
+        android:id="@+id/recycler_view_recipes_overview"
+        android:layout_marginRight="@dimen/common_fragment_margin_right">
 
     </android.support.v7.widget.RecyclerView>
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="common_fragment_margin_right">10dp</dimen>
+
     <dimen name="recipes_details_parent_weight">5</dimen>
     <dimen name="recipe_ingredients_weight">2</dimen>
     <dimen name="recipe_steps_weight">3</dimen>

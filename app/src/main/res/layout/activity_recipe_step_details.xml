@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recipes.recipe_step_details.DetailedRecipeStepsActivity">
+    tools:context=".recipes.recipe_step_details.DetailedRecipeStepsActivity"
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recipe_step_details_fragment_container">
+
+    </FrameLayout>
+
+    <!-- TODO: Next and previous step buttons -->
+
+</LinearLayout>

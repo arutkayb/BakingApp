@@ -55,7 +55,7 @@ public class DetailedRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<Det
 
     @Override
     public int getItemCount() {
-        return 0;
+        return stepList.size();
     }
 
     class RecipeStepsHolder extends RecyclerView.ViewHolder{
