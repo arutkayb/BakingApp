@@ -12,4 +12,6 @@
     <string name="ingredient_name">Ingredient</string>
     <string name="ingredient_quantity">Quantity</string>
     <string name="ingredient_measure">Measure</string>
+
+    <string name="widget_header">Baking Widget</string>
 </resources>

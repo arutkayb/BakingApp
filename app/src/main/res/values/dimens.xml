@@ -25,4 +25,7 @@
     <dimen name="text_size_recipe_item_recipe_servings">16sp</dimen>
 
     <dimen name="text_size_content_header">22sp</dimen>
+
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_header_padding">8dp</dimen>
 </resources>

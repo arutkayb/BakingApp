@@ -1,5 +1,7 @@
 package centertableinc.ed.bakingapp.recipes.recipes_overview;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.PersistableBundle;
@@ -21,6 +23,8 @@ import centertableinc.ed.bakingapp.recipes.data.udacity_data.UdacityRecipesDB;
 import centertableinc.ed.bakingapp.recipes.recipe_details.RecipeDetailsActivity;
 import centertableinc.ed.bakingapp.recipes.recipe_details.RecipeDetailsFragment;
 import centertableinc.ed.bakingapp.util.RecyclerViewUtil;
+import centertableinc.ed.bakingapp.util.SharedPrefsUtil;
+import centertableinc.ed.bakingapp.widget.BakingWidget;
 
 public class RecipesMasterActivity extends AppCompatActivity
         implements AsyncDataListener<RecipeList> {
@@ -71,6 +75,15 @@ public class RecipesMasterActivity extends AppCompatActivity
                     @Override
                     public void onItemSelectedEvent(int itemNo) {
                         callRecipeDetails(list.getRecipeList().get(itemNo));
+
+                        SharedPrefsUtil.saveLastSelectedRecipeIngredientNames(getApplicationContext(),
+                                list.getRecipeList().get(itemNo));
+
+                        Intent intent = new Intent(getApplicationContext(), BakingWidget.class);
+                        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+                        int ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), BakingWidget.class));
+                        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+                        sendBroadcast(intent);
                     }
                 }, list);
 

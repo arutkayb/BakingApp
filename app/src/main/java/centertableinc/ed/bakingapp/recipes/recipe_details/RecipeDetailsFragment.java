@@ -139,7 +139,7 @@ public class RecipeDetailsFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        
+
         RecyclerViewUtil.setScrollPosition(basicRecipeStepsRecyclerView, basicRecipeStepsPersistedPosition);
         RecyclerViewUtil.setScrollPosition(recipeIngredientsRecyclerView, recipeIngredientsPersistedPosition);
     }
