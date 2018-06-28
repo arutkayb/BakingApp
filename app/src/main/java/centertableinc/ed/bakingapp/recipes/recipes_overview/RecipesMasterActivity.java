@@ -1,6 +1,8 @@
 package centertableinc.ed.bakingapp.recipes.recipes_overview;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ public class RecipesMasterActivity extends AppCompatActivity
     RecipeList recipeList;
     FrameLayout recipe_details_fragment_container;
     RecyclerView overviewRecyclerView;
+
+    private int persistedScrollPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,4 +91,22 @@ public class RecipesMasterActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        overviewRecyclerView.scrollToPosition(persistedScrollPosition);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        persistedScrollPosition = getFirstVisibleItemOfRecyclerView();
+    }
+
+    private int getFirstVisibleItemOfRecyclerView(){
+        return ((LinearLayoutManager)overviewRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+    }
 }

@@ -1,7 +1,11 @@
 package centertableinc.ed.bakingapp.recipes.recipe_step_details;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +14,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +45,12 @@ public class RecipeStepDetailsFragment extends Fragment {
     RecipeStep step;
     View view;
     RecyclerView detailedRecipeStepsRecyclerView;
+    ImageView recipeStepsMediaContainer;
+    SimpleExoPlayer player;
+    PlayerView playerView;
+
+    int persistedScrollPosition = 0;
+
 
     public RecipeStepDetailsFragment(){
     }
@@ -89,7 +113,13 @@ public class RecipeStepDetailsFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         detailedRecipeStepsRecyclerView.setLayoutManager(layoutManager);
+        
         //TODO: init the view and fill the necessary fields
+        initialiseMedia();
+    }
+
+    private void initialiseMedia(){
+        //TODO: media goes here
     }
 
     @Override
@@ -102,5 +132,24 @@ public class RecipeStepDetailsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         //TODO: avoid memory leaks
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        detailedRecipeStepsRecyclerView.scrollToPosition(persistedScrollPosition);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        persistedScrollPosition = getFirstVisibleItemOfRecyclerView();
+    }
+
+    private int getFirstVisibleItemOfRecyclerView(){
+        return ((LinearLayoutManager)detailedRecipeStepsRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
     }
 }

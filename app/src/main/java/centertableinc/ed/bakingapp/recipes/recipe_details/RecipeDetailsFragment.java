@@ -2,6 +2,7 @@ package centertableinc.ed.bakingapp.recipes.recipe_details;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +36,9 @@ public class RecipeDetailsFragment extends Fragment {
 
     BasicRecipeStepsRecyclerAdapter basicRecipeStepsRecyclerAdapter;
     RecipeIngredientsRecyclerAdapter recipeIngredientsRecyclerAdapter;
+
+    int basicRecipeStepsPersistedPosition = 0;
+    int recipeIngredientsPersistedPosition = 0;
 
     public RecipeDetailsFragment() {
     }
@@ -128,6 +132,28 @@ public class RecipeDetailsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         //TODO: avoid memory leaks
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        basicRecipeStepsRecyclerView.scrollToPosition(basicRecipeStepsPersistedPosition);
+        recipeIngredientsRecyclerView.scrollToPosition(recipeIngredientsPersistedPosition);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        basicRecipeStepsPersistedPosition = getFirstVisibleItemOfRecyclerView(basicRecipeStepsRecyclerView);
+        recipeIngredientsPersistedPosition = getFirstVisibleItemOfRecyclerView(recipeIngredientsRecyclerView);
+
+    }
+
+    private int getFirstVisibleItemOfRecyclerView(RecyclerView view){
+        return ((LinearLayoutManager)view.getLayoutManager()).findFirstVisibleItemPosition();
     }
 
 }
