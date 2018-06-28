@@ -36,6 +36,7 @@ import centertableinc.ed.bakingapp.R;
 import centertableinc.ed.bakingapp.recipes.data.RecipeStep;
 import centertableinc.ed.bakingapp.recipes.recipe_details.RecipeDetailsFragment;
 import centertableinc.ed.bakingapp.recipes.recipe_step_details.recycler.DetailedRecipeStepsRecyclerAdapter;
+import centertableinc.ed.bakingapp.util.RecyclerViewUtil;
 
 import static centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity.RECIPE_SELECTED_STEP;
 import static centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity.RECIPE_SELECTED_STEP_NO;
@@ -113,7 +114,7 @@ public class RecipeStepDetailsFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         detailedRecipeStepsRecyclerView.setLayoutManager(layoutManager);
-        
+
         //TODO: init the view and fill the necessary fields
         initialiseMedia();
     }
@@ -138,8 +139,7 @@ public class RecipeStepDetailsFragment extends Fragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        detailedRecipeStepsRecyclerView.scrollToPosition(persistedScrollPosition);
-
+        RecyclerViewUtil.setScrollPosition(detailedRecipeStepsRecyclerView, persistedScrollPosition);
     }
 
     @Override

@@ -20,6 +20,7 @@ import centertableinc.ed.bakingapp.recipes.data.RecipesDB;
 import centertableinc.ed.bakingapp.recipes.data.udacity_data.UdacityRecipesDB;
 import centertableinc.ed.bakingapp.recipes.recipe_details.RecipeDetailsActivity;
 import centertableinc.ed.bakingapp.recipes.recipe_details.RecipeDetailsFragment;
+import centertableinc.ed.bakingapp.util.RecyclerViewUtil;
 
 public class RecipesMasterActivity extends AppCompatActivity
         implements AsyncDataListener<RecipeList> {
@@ -95,8 +96,7 @@ public class RecipesMasterActivity extends AppCompatActivity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        overviewRecyclerView.scrollToPosition(persistedScrollPosition);
-
+        RecyclerViewUtil.setScrollPosition(overviewRecyclerView, persistedScrollPosition);
     }
 
     @Override

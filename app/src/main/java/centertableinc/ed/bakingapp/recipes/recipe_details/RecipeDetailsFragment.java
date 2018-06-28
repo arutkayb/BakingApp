@@ -24,6 +24,7 @@ import centertableinc.ed.bakingapp.recipes.data.Recipe;
 import centertableinc.ed.bakingapp.recipes.recipe_details.recycler.BasicRecipeStepsRecyclerAdapter;
 import centertableinc.ed.bakingapp.recipes.recipe_details.recycler.RecipeIngredientsRecyclerAdapter;
 import centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity;
+import centertableinc.ed.bakingapp.util.RecyclerViewUtil;
 
 import static centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity.RECIPE_SELECTED_STEP_NO;
 import static centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity.RECIPE_STEP_LIST_PARCELABLE_KEY;
@@ -138,9 +139,9 @@ public class RecipeDetailsFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
-        basicRecipeStepsRecyclerView.scrollToPosition(basicRecipeStepsPersistedPosition);
-        recipeIngredientsRecyclerView.scrollToPosition(recipeIngredientsPersistedPosition);
+        
+        RecyclerViewUtil.setScrollPosition(basicRecipeStepsRecyclerView, basicRecipeStepsPersistedPosition);
+        RecyclerViewUtil.setScrollPosition(recipeIngredientsRecyclerView, recipeIngredientsPersistedPosition);
     }
 
     @Override
