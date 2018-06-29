@@ -29,14 +29,17 @@ public class DetailedRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<Det
     private RecyclerViewListener listener;
     private List<RecipeStep> stepList;
     private Context context;
+    private int stepNo;
 
-    public DetailedRecipeStepsRecyclerAdapter(Context context, List<RecipeStep> steps){
+    public DetailedRecipeStepsRecyclerAdapter(Context context, List<RecipeStep> steps, int stepNo){
         this.context = context;
         stepList = steps;
+        this.stepNo = stepNo;
     }
 
-    public void setIngredientList(List<RecipeStep> steps){
+    public void setIngredientList(List<RecipeStep> steps, int stepNo){
         stepList = steps;
+        this.stepNo = stepNo;
     }
 
     @NonNull
@@ -93,7 +96,7 @@ public class DetailedRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<Det
             description.setText(recipeStep.getStepDescription());
 
             String stepNumberText = context.getString(R.string.step_number)
-                    + ": " + String.valueOf(getAdapterPosition());
+                    + ": " + String.valueOf(stepNo);
             stepNumber.setText(stepNumberText);
         }
     }

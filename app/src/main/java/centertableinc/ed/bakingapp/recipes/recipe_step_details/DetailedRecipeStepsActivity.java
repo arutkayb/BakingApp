@@ -6,7 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,6 +29,8 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
 
+    Button recipeStepButtonPrevious, recipeStepButtonNext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +46,30 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
             selectedStepNo = 0;
         selectedStep = recipeSteps.get(selectedStepNo);
 
-        bindDetailedSteps(selectedStep, selectedStepNo);
+        if(savedInstanceState == null)
+            bindDetailedSteps(selectedStep, selectedStepNo);
     }
 
     private void initialise(){
         fragmentManager = getSupportFragmentManager();
+
+        recipeStepButtonPrevious = findViewById(R.id.recipe_step_button_previous);
+        recipeStepButtonPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecipeStep step = getPreviousStep();
+                bindDetailedSteps(step, selectedStepNo);
+            }
+        });
+
+        recipeStepButtonNext = findViewById(R.id.recipe_step_button_next);
+        recipeStepButtonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecipeStep step = getNextStep();
+                bindDetailedSteps(step, selectedStepNo);
+            }
+        });
     }
 
     private boolean getRecipeStepsFromIntent(){
@@ -65,13 +89,49 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
     }
 
     private void bindDetailedSteps(RecipeStep step, int stepNo){
-        if(recipeStepDetailsFragment == null)
-            recipeStepDetailsFragment = RecipeStepDetailsFragment.newInstance(step, stepNo);
-        else
-            recipeStepDetailsFragment.setRecipeStep(step, stepNo);
+        recipeStepDetailsFragment = null;
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.recipe_step_details_fragment_container, recipeStepDetailsFragment)
-                .commit();
+        recipeStepDetailsFragment = RecipeStepDetailsFragment.newInstance(step, stepNo);
+
+        if(step != null) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.recipe_step_details_fragment_container, recipeStepDetailsFragment)
+                    .commit();
+        }
+
+        updateButtonClickableStatus();
+    }
+
+    private void updateButtonClickableStatus(){
+        recipeStepButtonPrevious.setClickable(true);
+        recipeStepButtonNext.setClickable(true);
+
+        if(selectedStepNo == recipeSteps.size() - 1){
+            recipeStepButtonNext.setClickable(false);
+        }else if(selectedStepNo == 0){
+            recipeStepButtonPrevious.setClickable(false);
+        }
+    }
+
+    private RecipeStep getNextStep(){
+        RecipeStep resultStep = null;
+
+        if(selectedStepNo < recipeSteps.size() - 1){
+            selectedStepNo++;
+            resultStep = recipeSteps.get(selectedStepNo);
+        }
+
+        return resultStep;
+    }
+
+    private RecipeStep getPreviousStep(){
+        RecipeStep resultStep = null;
+
+        if(selectedStepNo > 0){
+            selectedStepNo--;
+            resultStep = recipeSteps.get(selectedStepNo);
+        }
+
+        return resultStep;
     }
 }

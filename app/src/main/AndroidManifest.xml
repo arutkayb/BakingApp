@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:configChanges="orientation|keyboardHidden|screenSize">
+        android:configChanges="orientation|keyboardHidden|screenSize"
+        android:launchMode="singleTop">
         <activity android:name=".recipes.recipes_overview.RecipesMasterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".recipes.recipe_details.RecipeDetailsActivity" />
-        <activity android:name=".recipes.recipe_step_details.DetailedRecipeStepsActivity"></activity>
+        <activity android:name=".recipes.recipe_step_details.DetailedRecipeStepsActivity"/>
 
         <receiver android:name=".widget.BakingWidget">
             <intent-filter>

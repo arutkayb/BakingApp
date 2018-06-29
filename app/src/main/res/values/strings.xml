@@ -14,4 +14,7 @@
     <string name="ingredient_measure">Measure</string>
 
     <string name="widget_header">Baking Widget</string>
+
+    <string name="button_previous"> Previous </string>
+    <string name="button_next"> Next </string>
 </resources>
