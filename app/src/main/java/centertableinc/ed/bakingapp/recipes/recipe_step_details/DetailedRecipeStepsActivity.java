@@ -41,13 +41,16 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
         if(!getRecipeStepsFromIntent())
             finish();
 
-        selectedStepNo = getIntent().getIntExtra(RECIPE_SELECTED_STEP_NO, 0);
-        if(selectedStepNo > recipeSteps.size())
-            selectedStepNo = 0;
-        selectedStep = recipeSteps.get(selectedStepNo);
+        if(savedInstanceState == null) {
+            selectedStepNo = getIntent().getIntExtra(RECIPE_SELECTED_STEP_NO, 0);
+            if (selectedStepNo > recipeSteps.size())
+                selectedStepNo = 0;
+            selectedStep = recipeSteps.get(selectedStepNo);
 
-        if(savedInstanceState == null)
             bindDetailedSteps(selectedStep, selectedStepNo);
+        }else{
+            selectedStepNo = savedInstanceState.getInt(RECIPE_SELECTED_STEP_NO);
+        }
     }
 
     private void initialise(){
@@ -133,5 +136,12 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
         }
 
         return resultStep;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(RECIPE_SELECTED_STEP_NO, selectedStepNo);
     }
 }
