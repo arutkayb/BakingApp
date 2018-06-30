@@ -149,8 +149,13 @@ public class RecipeStepDetailsFragment extends Fragment implements Player.EventL
 
         playerView = view.findViewById(R.id.recipe_steps_player_view);
         playerView.setVisibility(View.VISIBLE);
-        createPlayer();
-        preparePlayer();
+    }
+
+    private void runMedia(){
+        if(playerView != null) {
+            createPlayer();
+            preparePlayer();
+        }
     }
 
     private void createPlayer(){
@@ -196,10 +201,40 @@ public class RecipeStepDetailsFragment extends Fragment implements Player.EventL
     @Override
     public void onDetach() {
         super.onDetach();
+    }
 
-        //TODO: avoid memory leaks
-        if(player != null)
-            player.release();
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            runMedia();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23)) {
+            runMedia();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            if(player != null)
+                player.release();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            if(player != null)
+                player.release();
+        }
     }
 
     @Override
