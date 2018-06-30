@@ -11,7 +11,7 @@ Udacity Android Nanodegree Project BakingApp
 * Master/Detail Flow UI Pattern
 
 * Exoplayer to display videos
-* State persistance and responsive design
+* State persistence and responsive design
 
 * Homescreen widget
 
