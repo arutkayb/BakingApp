@@ -8,13 +8,6 @@
     android:orientation="vertical"
     android:baselineAligned="false">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/detailed_recipe_steps_recycler_view"
-        android:background="@color/colorPrimaryLight">
-    </android.support.v7.widget.RecyclerView>
-
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/recipe_steps_player_view"
         android:layout_width="match_parent"

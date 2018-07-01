@@ -1,35 +1,43 @@
 package centertableinc.ed.bakingapp.recipes.recipe_step_details;
 
-import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import centertableinc.ed.bakingapp.R;
+import centertableinc.ed.bakingapp.recipes.common.RecyclerViewListener;
 import centertableinc.ed.bakingapp.recipes.data.RecipeStep;
-import centertableinc.ed.bakingapp.recipes.recipe_details.RecipeDetailsFragment;
+import centertableinc.ed.bakingapp.recipes.recipe_step_details.recycler.DetailedRecipeStepsRecyclerAdapter;
+import centertableinc.ed.bakingapp.util.RecyclerViewUtil;
 
 public class DetailedRecipeStepsActivity extends AppCompatActivity {
     public static final String RECIPE_STEP_LIST_PARCELABLE_KEY = "recipe_step_list";
+    public static final String RECIPE_SELECTED_STEP_MEDIA = "selected_step_media";
     public static final String RECIPE_SELECTED_STEP_NO = "selected_step_no";
     public static final String RECIPE_SELECTED_STEP = "selected_step";
 
     ArrayList<RecipeStep> recipeSteps;
     RecipeStep selectedStep;
     int selectedStepNo;
+    int persistedScrollPosition;
     RecipeStepDetailsFragment recipeStepDetailsFragment;
 
     FragmentManager fragmentManager;
 
     Button recipeStepButtonPrevious, recipeStepButtonNext;
+    RecyclerView detailedRecipeStepsRecyclerView;
+    TextView recipeStepDetailsMediaHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,32 +55,90 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
                 selectedStepNo = 0;
             selectedStep = recipeSteps.get(selectedStepNo);
 
-            bindDetailedSteps(selectedStep, selectedStepNo);
+            bindRecipeStepDetails();
         }else{
+            selectedStep = savedInstanceState.getParcelable(RECIPE_SELECTED_STEP);
             selectedStepNo = savedInstanceState.getInt(RECIPE_SELECTED_STEP_NO);
         }
+
+        bindDetailedStepsRecyclerView();
+
+        updateMediaHeader();
     }
 
     private void initialise(){
         fragmentManager = getSupportFragmentManager();
 
+        recipeStepDetailsMediaHeader = findViewById(R.id.recipe_step_details_media_header);
         recipeStepButtonPrevious = findViewById(R.id.recipe_step_button_previous);
-        recipeStepButtonPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RecipeStep step = getPreviousStep();
-                bindDetailedSteps(step, selectedStepNo);
-            }
-        });
-
         recipeStepButtonNext = findViewById(R.id.recipe_step_button_next);
-        recipeStepButtonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RecipeStep step = getNextStep();
-                bindDetailedSteps(step, selectedStepNo);
-            }
-        });
+
+        if(!isTwoPane()) {
+            recipeStepButtonNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setNextStep();
+                    bindDetailedRecipeSteps();
+                }
+            });
+
+            recipeStepButtonPrevious.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setPreviousStep();
+                    bindDetailedRecipeSteps();
+                }
+            });
+        }
+
+        detailedRecipeStepsRecyclerView = findViewById(R.id.detailed_recipe_steps_recycler_view);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        detailedRecipeStepsRecyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void bindDetailedRecipeSteps(){
+        bindRecipeStepDetails();
+        bindDetailedStepsRecyclerView();
+        updateMediaHeader();
+    }
+
+    private void updateMediaHeader(){
+        if(isTwoPane()) {
+            String stepNumberText = selectedStep.getStepDescription();
+
+            recipeStepDetailsMediaHeader.setText(stepNumberText);
+        }
+    }
+
+    private boolean isTwoPane(){
+        return (recipeStepButtonPrevious == null || recipeStepButtonNext == null);
+    }
+
+
+    private void bindDetailedStepsRecyclerView() {
+        RecyclerViewUtil.setScrollPosition(detailedRecipeStepsRecyclerView, persistedScrollPosition);
+
+        List<RecipeStep> steps;
+        if (!isTwoPane()) {
+            steps = new ArrayList<RecipeStep>();
+            steps.add(selectedStep);
+        } else {
+            steps = recipeSteps;
+        }
+
+        DetailedRecipeStepsRecyclerAdapter detailedRecipeStepsRecyclerAdapter =
+                new DetailedRecipeStepsRecyclerAdapter(this, new RecyclerViewListener() {
+                    @Override
+                    public void onItemSelectedEvent(int itemNo) {
+                        if (isTwoPane()) {
+                            setStep(itemNo);
+                            bindDetailedRecipeSteps();
+                        }
+                    }
+                }, steps);
+
+        detailedRecipeStepsRecyclerView.setAdapter(detailedRecipeStepsRecyclerAdapter);
     }
 
     private boolean getRecipeStepsFromIntent(){
@@ -91,51 +157,50 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
         return ret;
     }
 
-    private void bindDetailedSteps(RecipeStep step, int stepNo){
-        recipeStepDetailsFragment = null;
+    private void bindRecipeStepDetails(){
+        recipeStepDetailsFragment = RecipeStepDetailsFragment.newInstance(selectedStep.getStepVideoUrl());
 
-        recipeStepDetailsFragment = RecipeStepDetailsFragment.newInstance(step, stepNo);
-
-        if(step != null) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.recipe_step_details_fragment_container, recipeStepDetailsFragment)
-                    .commit();
-        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.recipe_step_details_fragment_container, recipeStepDetailsFragment)
+                .commit();
 
         updateButtonClickableStatus();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        bindDetailedStepsRecyclerView();
+    }
+
     private void updateButtonClickableStatus(){
-        recipeStepButtonPrevious.setClickable(true);
-        recipeStepButtonNext.setClickable(true);
+        if(!isTwoPane()) {
+            recipeStepButtonPrevious.setClickable(true);
+            recipeStepButtonNext.setClickable(true);
 
-        if(selectedStepNo == recipeSteps.size() - 1){
-            recipeStepButtonNext.setClickable(false);
-        }else if(selectedStepNo == 0){
-            recipeStepButtonPrevious.setClickable(false);
+            if (selectedStepNo == recipeSteps.size() - 1) {
+                recipeStepButtonNext.setClickable(false);
+            } else if (selectedStepNo == 0) {
+                recipeStepButtonPrevious.setClickable(false);
+            }
         }
     }
 
-    private RecipeStep getNextStep(){
-        RecipeStep resultStep = null;
-
-        if(selectedStepNo < recipeSteps.size() - 1){
-            selectedStepNo++;
-            resultStep = recipeSteps.get(selectedStepNo);
+    private void setStep(int stepNo){
+        if(stepNo < recipeSteps.size() - 1 && stepNo >= 0){
+            selectedStepNo = stepNo;
+            selectedStep = recipeSteps.get(selectedStepNo);
         }
-
-        return resultStep;
     }
 
-    private RecipeStep getPreviousStep(){
-        RecipeStep resultStep = null;
+    private void setNextStep(){
+        int tempStepNo = selectedStepNo + 1;
+        setStep(tempStepNo);
+    }
 
-        if(selectedStepNo > 0){
-            selectedStepNo--;
-            resultStep = recipeSteps.get(selectedStepNo);
-        }
-
-        return resultStep;
+    private void setPreviousStep(){
+        int tempStepNo = selectedStepNo - 1;
+        setStep(tempStepNo);
     }
 
     @Override
@@ -143,5 +208,12 @@ public class DetailedRecipeStepsActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         outState.putInt(RECIPE_SELECTED_STEP_NO, selectedStepNo);
+        persistedScrollPosition = getFirstVisibleItemOfRecyclerView();
+
+        outState.putParcelable(RECIPE_SELECTED_STEP, selectedStep);
+    }
+
+    private int getFirstVisibleItemOfRecyclerView(){
+        return ((LinearLayoutManager)detailedRecipeStepsRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
     }
 }

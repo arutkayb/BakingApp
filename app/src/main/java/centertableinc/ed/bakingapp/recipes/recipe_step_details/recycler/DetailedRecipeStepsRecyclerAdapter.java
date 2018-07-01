@@ -29,17 +29,11 @@ public class DetailedRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<Det
     private RecyclerViewListener listener;
     private List<RecipeStep> stepList;
     private Context context;
-    private int stepNo;
 
-    public DetailedRecipeStepsRecyclerAdapter(Context context, List<RecipeStep> steps, int stepNo){
+    public DetailedRecipeStepsRecyclerAdapter(Context context, RecyclerViewListener listener, List<RecipeStep> steps){
         this.context = context;
         stepList = steps;
-        this.stepNo = stepNo;
-    }
-
-    public void setIngredientList(List<RecipeStep> steps, int stepNo){
-        stepList = steps;
-        this.stepNo = stepNo;
+        this.listener = listener;
     }
 
     @NonNull
@@ -61,7 +55,7 @@ public class DetailedRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<Det
         return stepList.size();
     }
 
-    class RecipeStepsHolder extends RecyclerView.ViewHolder{
+    class RecipeStepsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView thumbnail;
         TextView description;
         TextView stepNumber;
@@ -72,6 +66,8 @@ public class DetailedRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<Det
             thumbnail = itemView.findViewById(R.id.thumbnail);
             description = itemView.findViewById(R.id.description);
             stepNumber = itemView.findViewById(R.id.step_number);
+
+            itemView.setOnClickListener(this);
         }
 
         void bindHolder(RecipeStep recipeStep){
@@ -93,11 +89,17 @@ public class DetailedRecipeStepsRecyclerAdapter extends RecyclerView.Adapter<Det
                     thumbnail_uri,
                     thumbnail);
 
-            description.setText(recipeStep.getStepDescription());
+            description.setText(recipeStep.getStepShortDescription());
 
             String stepNumberText = context.getString(R.string.step_number)
-                    + ": " + String.valueOf(stepNo);
+                    + ": " + String.valueOf(recipeStep.getStepId());
             stepNumber.setText(stepNumberText);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = getAdapterPosition();
+            listener.onItemSelectedEvent(pos);
         }
     }
 }

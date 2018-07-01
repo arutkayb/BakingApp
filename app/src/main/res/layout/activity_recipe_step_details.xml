@@ -29,6 +29,13 @@
             />
     </LinearLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/detailed_recipe_steps_recycler_view"
+        android:background="@color/colorPrimaryLight">
+    </android.support.v7.widget.RecyclerView>
+
     <FrameLayout
         android:id="@+id/recipe_step_details_fragment_container"
         android:layout_width="match_parent"

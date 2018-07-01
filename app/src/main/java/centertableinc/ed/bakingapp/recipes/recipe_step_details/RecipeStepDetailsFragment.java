@@ -47,7 +47,7 @@ import centertableinc.ed.bakingapp.recipes.recipe_details.RecipeDetailsFragment;
 import centertableinc.ed.bakingapp.recipes.recipe_step_details.recycler.DetailedRecipeStepsRecyclerAdapter;
 import centertableinc.ed.bakingapp.util.RecyclerViewUtil;
 
-import static centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity.RECIPE_SELECTED_STEP;
+import static centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity.RECIPE_SELECTED_STEP_MEDIA;
 import static centertableinc.ed.bakingapp.recipes.recipe_step_details.DetailedRecipeStepsActivity.RECIPE_SELECTED_STEP_NO;
 
 public class RecipeStepDetailsFragment extends Fragment implements Player.EventListener{
@@ -56,24 +56,18 @@ public class RecipeStepDetailsFragment extends Fragment implements Player.EventL
     long startPosition;
     boolean startAutoPlay;
 
-    int stepNo;
-    RecipeStep step;
+    Uri mediaUri;
     View view;
-    RecyclerView detailedRecipeStepsRecyclerView;
     ImageView recipeStepsMediaContainer;
     SimpleExoPlayer player;
     PlayerView playerView;
 
-    int persistedScrollPosition = 0;
-
-
     public RecipeStepDetailsFragment(){
     }
 
-    public static RecipeStepDetailsFragment newInstance(RecipeStep step, int stepNo){
+    public static RecipeStepDetailsFragment newInstance(String mediaUri){
         Bundle bundle = new Bundle();
-        bundle.putInt(RECIPE_SELECTED_STEP_NO, stepNo);
-        bundle.putParcelable(RECIPE_SELECTED_STEP, step);
+        bundle.putString(RECIPE_SELECTED_STEP_MEDIA, mediaUri);
 
         RecipeStepDetailsFragment recipeStepDetailsFragment = new RecipeStepDetailsFragment();
         recipeStepDetailsFragment.setArguments(bundle);
@@ -87,10 +81,8 @@ public class RecipeStepDetailsFragment extends Fragment implements Player.EventL
 
         Bundle bundle = getArguments();
         if(bundle != null) {
-            int stepNo = bundle.getInt(RECIPE_SELECTED_STEP_NO, 0);
-            RecipeStep step = bundle.getParcelable(RECIPE_SELECTED_STEP);
-
-            setRecipeStep(step, stepNo);
+            String mediaUriString = bundle.getString(RECIPE_SELECTED_STEP_MEDIA);
+            this.mediaUri = Uri.parse(mediaUriString);
 
             if(savedInstanceState != null) {
                 startPosition = savedInstanceState.getLong(KEY_START_POS);
@@ -101,11 +93,6 @@ public class RecipeStepDetailsFragment extends Fragment implements Player.EventL
         }
     }
 
-    public void setRecipeStep(RecipeStep recipeStep, int stepNo){
-        this.step = recipeStep;
-        this.stepNo = stepNo;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -114,27 +101,11 @@ public class RecipeStepDetailsFragment extends Fragment implements Player.EventL
 
         initialise();
 
-        bindDetailedStepsRecyclerView();
-
         return view;
     }
 
-    private void bindDetailedStepsRecyclerView(){
-        List<RecipeStep> steps = new ArrayList<RecipeStep>();
-        steps.add(step);
-
-        DetailedRecipeStepsRecyclerAdapter detailedRecipeStepsRecyclerAdapter = new DetailedRecipeStepsRecyclerAdapter(getContext(), steps, stepNo);
-
-        detailedRecipeStepsRecyclerView.setAdapter(detailedRecipeStepsRecyclerAdapter);
-    }
-
     private void initialise(){
-        detailedRecipeStepsRecyclerView = view.findViewById(R.id.detailed_recipe_steps_recycler_view);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        detailedRecipeStepsRecyclerView.setLayoutManager(layoutManager);
-
-        if(!step.getStepVideoUrl().isEmpty())
+        if(mediaUri != null)
             initialiseMedia();
     }
 
@@ -182,9 +153,8 @@ public class RecipeStepDetailsFragment extends Fragment implements Player.EventL
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
                 Util.getUserAgent(getContext(), getString(R.string.app_name)), bandwidthMeter);
         // This is the MediaSource representing the media to be played.
-        Uri videoUri = Uri.parse(step.getStepVideoUrl());
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(videoUri);
+                .createMediaSource(mediaUri);
         // Prepare the player with the source.
         player.prepare(videoSource);
 
@@ -238,17 +208,8 @@ public class RecipeStepDetailsFragment extends Fragment implements Player.EventL
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        RecyclerViewUtil.setScrollPosition(detailedRecipeStepsRecyclerView, persistedScrollPosition);
-    }
-
-    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        persistedScrollPosition = getFirstVisibleItemOfRecyclerView();
 
         if(player != null) {
             long startPos = Math.max(0, player.getContentPosition());
@@ -257,10 +218,6 @@ public class RecipeStepDetailsFragment extends Fragment implements Player.EventL
             boolean autoPlay = player.getPlayWhenReady();
             outState.putBoolean(KEY_START_AUTO_PLAY, autoPlay);
         }
-    }
-
-    private int getFirstVisibleItemOfRecyclerView(){
-        return ((LinearLayoutManager)detailedRecipeStepsRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
     }
 
     @Override

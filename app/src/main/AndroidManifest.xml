@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:configChanges="orientation|keyboardHidden|screenSize"
+        android:configChanges="orientation|screenSize"
         android:launchMode="singleTop">
         <activity android:name=".recipes.recipes_overview.RecipesMasterActivity">
             <intent-filter>
